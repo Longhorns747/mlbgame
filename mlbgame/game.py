@@ -172,8 +172,8 @@ class GameAtBat(object):
         self.inning_state = self.data["inning_state"]
         self.pitcher = self.data["players"]["pitcher"]
         self.batter = self.data["players"]["batter"]
-        at_bat = self.data["atbat"]
-        self.pitches = at_bat["p"]
+        self.at_bat = self.data["atbat"]
+        self.pitches = self.at_bat["p"]
 
 
 class GameBoxScore(object):

@@ -32,7 +32,7 @@ def get_scoreboard(year, month, day):
     return data
 
 def get_at_bat(game_id):
-    """Return the at file of a game with matching id."""
+    """Return the at bat file of a game with matching id."""
     # get relevant information from game id
     year, month, day, rest = game_id.split('_', 3)
 
