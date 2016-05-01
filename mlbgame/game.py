@@ -6,6 +6,7 @@ such as the scoreboard and the box score.
 
 import lxml.etree as etree
 import datetime
+import json
 import mlbgame.data
 
 def scoreboard(year, month, day, home=None, away=None):
@@ -134,6 +135,10 @@ class GameScoreboard(object):
     def nice_score(self):
         """Return a nicely formatted score of the game."""
         return '%s (%d) at %s (%d)' % (self.away_team, self.away_team_runs, self.home_team, self.home_team_runs)
+
+    def get_live_at_bat(self):
+        """Return the current at bat with live data"""
+        return GameAtBat(self.game_id)
     
     def __str__(self):
         return self.nice_score()
@@ -155,6 +160,21 @@ def box_score(game_id):
         away = x.attrib['away']
         result[int(inning)] = {'home':home, 'away':away}
     return result
+
+class GameAtBat(object):
+    """Object to hold the current at bat of the game"""
+
+    def __init__(self, game_id):
+        data = mlbgame.data.get_at_bat(game_id)
+
+        self.data = json.loads(data)["data"]["game"]
+        self.inning = self.data["inning"]
+        self.inning_state = self.data["inning_state"]
+        self.pitcher = self.data["players"]["pitcher"]
+        self.batter = self.data["players"]["batter"]
+        at_bat = self.data["atbat"]
+        self.pitches = at_bat["p"]
+
 
 class GameBoxScore(object):
     """Object to hold the box score of a certain game."""

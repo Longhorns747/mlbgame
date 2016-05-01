@@ -31,6 +31,17 @@ def get_scoreboard(year, month, day):
             data = os.path.join(os.path.dirname(__file__), "gameday-data/default.xml")
     return data
 
+def get_at_bat(game_id):
+    """Return the at file of a game with matching id."""
+    # get relevant information from game id
+    year, month, day, rest = game_id.split('_', 3)
+
+    try:
+        data = urlopen("http://gd2.mlb.com/components/game/mlb/year_%s/month_%s/day_%s/gid_%s/plays.json" % (year, month, day, game_id))
+    except HTTPError:
+        raise ValueError("Could not find a game with that id.")
+    return data.read()
+
 def get_box_score(game_id):
     """Return the box score file of a game with matching id."""
     # get relevant information from game id
